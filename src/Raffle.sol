@@ -15,7 +15,6 @@ contract Raffle is VRFConsumerBaseV2Plus {
     // Events
     // Modifiers
     // Functions
-
     error NotEnoughEth();
     error NotSendWinnerMoney();
     error WaitNextDrawTime();
