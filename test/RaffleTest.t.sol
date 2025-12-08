@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.18;
+pragma solidity 0.8.20;
 
 import {Test, console} from "forge-std/Test.sol";
 import {Raffle} from "../src/Raffle.sol";
@@ -15,8 +15,8 @@ contract RaffleTest is Test {
     uint256 entranceFee;
     uint256 interval;
     address vrfCoordinator;
-    bytes32 gasLane;
-    uint64 subscriptionId;
+    bytes32 gasLine;
+    uint256 subscriptionId;
     uint32 callbackGasLimit;
 
     address public PLAYER = makeAddr("player");
@@ -33,18 +33,12 @@ contract RaffleTest is Test {
             entranceFee,
             interval,
             vrfCoordinator,
-            gasLane,
+            gasLine,
             subscriptionId,
             callbackGasLimit
         ) = helperConfig.activeNetworkConfig();
 
         vm.deal(PLAYER, STARTING_USER_BALANCE);
-    }
-
-    function testRaffleInitializesInOpenState() public view {
-        // 由于 Raffle 合约没有 getRaffleState 方法，我们无法直接测试状态
-        // 但可以通过其他方式验证
-        assertTrue(true);
     }
 
     function testRaffleRevertsWhenYouDontPayEnough() public {

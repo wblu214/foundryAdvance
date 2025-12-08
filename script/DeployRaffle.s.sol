@@ -8,23 +8,17 @@ import {HelperConfig} from "./HelperConfig.s.sol";
 contract DeployRaffle is Script {
     function run() external returns (Raffle, HelperConfig) {
         HelperConfig helperConfig = new HelperConfig();
-        (
-            uint256 entranceFee,
-            uint256 interval,
-            address vrfCoordinator,
-            bytes32 gasLine,
-            uint256 subscriptionId,
-            uint32 callbackGasLimit
-        ) = helperConfig.activeNetworkConfig();
+        HelperConfig.NetworkConfig memory config = helperConfig
+            .getActiveNetworkConfig();
 
         vm.startBroadcast();
         Raffle raffle = new Raffle(
-            entranceFee,
-            interval,
-            vrfCoordinator,
-            gasLine,
-            subscriptionId,
-            callbackGasLimit
+            config.entranceFee,
+            config.interval,
+            config.vrfCoordinator,
+            config.gasLine,
+            config.subscriptionId,
+            config.callbackGasLimit
         );
         vm.stopBroadcast();
 

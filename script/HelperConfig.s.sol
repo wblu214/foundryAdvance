@@ -21,6 +21,14 @@ contract HelperConfig is Script {
     NetworkConfig public activeNetworkConfig;
     NetworkConfig public localNetworkConfig;
 
+    function getActiveNetworkConfig()
+        public
+        view
+        returns (NetworkConfig memory)
+    {
+        return activeNetworkConfig;
+    }
+
     constructor() {
         if (block.chainid == 11155111) {
             activeNetworkConfig = getSepoliaEthConfig();
