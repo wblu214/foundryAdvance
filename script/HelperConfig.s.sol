@@ -48,7 +48,7 @@ contract HelperConfig is Script {
                 interval: 30, // 30 seconds
                 vrfCoordinator: 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B,
                 gasLine: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
-                subscriptionId: 0, // update this with your subscription id
+                subscriptionId: 28855828200589713910230302665439209463966397792234469502710021967951495031574, // update this with your subscription id
                 callbackGasLimit: 500000, // 500,000 gas
                 link: 0x779877A7B0D9E8603169DdbD7836e478b4624789
             });
@@ -61,7 +61,7 @@ contract HelperConfig is Script {
                 interval: 30, // 30 seconds
                 vrfCoordinator: 0xD7f86b4b8Cae7D942340FF628F82735b7a20893a,
                 gasLine: 0x3fd2fec10d06ee8f65e7f2e95f5c56511359ece3f33960ad8a866ae24a8ff10b,
-                subscriptionId: 0, // update this with your subscription id
+                subscriptionId: 28855828200589713910230302665439209463966397792234469502710021967951495031574, // update this with your subscription id
                 callbackGasLimit: 500000, // 500,000 gas
                 link: 0x514910771AF9Ca656af840dff83E8264EcF986CA
             });

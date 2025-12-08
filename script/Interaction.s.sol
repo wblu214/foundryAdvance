@@ -38,13 +38,51 @@ contract CreateSubscription is Script {
 }
 
 contract FundSubscription is Script {
-    function FundSubscriptionUsingConfig() public {
+    uint96 public constant FUND_AMOUNT = 3 ether;
+
+    function fundSubscriptionUsingConfig() public {
         HelperConfig helperConfig = new HelperConfig();
         address vrfCoordinator = helperConfig
             .getActiveNetworkConfig()
             .vrfCoordinator;
         uint256 subsID = helperConfig.getActiveNetworkConfig().subscriptionId;
+
+        address linkToken = helperConfig.getActiveNetworkConfig().link;
+
+        fundSubscription(vrfCoordinator, subsID, linkToken);
     }
 
-    function run() public {}
+    function fundSubscription(
+        address vrfCoordinatorV2_5,
+        uint256 subsID,
+        address linkToken
+    ) public {
+        console.log("fundSubscription on chain ID: ", block.chainid);
+        console.log("vrfCoordinator: ", vrfCoordinatorV2_5);
+        console.log("subsID: ", subsID);
+
+        if (block.chainid == 31337) {
+            vm.startBroadcast();
+            VRFCoordinatorV2_5Mock(vrfCoordinatorV2_5).fundSubscription(
+                subsID,
+                FUND_AMOUNT
+            );
+            vm.stopBroadcast();
+        } else {
+            console.log("Fund Subscription :", subsID);
+            console.log("Using vrfCoordinator: ", vrfCoordinatorV2_5);
+            console.log("On ChainID: ", block.chainid);
+            vm.startBroadcast();
+            LinkToken(linkToken).transferAndCall(
+                vrfCoordinatorV2_5,
+                subsID,
+                abi.encode(subsID)
+            );
+            vm.stopBroadcast();
+        }
+    }
+
+    function run() public {
+        fundSubscriptionUsingConfig();
+    }
 }
