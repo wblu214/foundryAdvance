@@ -77,7 +77,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
      * @param entranceFee 参与抽奖所需的入场费
      * @param interval 两次开奖之间的时间间隔（秒）
      * @param vrfCoordinator Chainlink VRF协调器合约地址
-     * @param gsaLine VRF密钥哈希
+     * @param gasLine VRF密钥哈希
      * @param subscriptionId VRF订阅ID
      * @param callbackGasLimit 回调函数的Gas限制
      */
@@ -85,13 +85,13 @@ contract Raffle is VRFConsumerBaseV2Plus {
         uint256 entranceFee,
         uint256 interval,
         address vrfCoordinator,
-        bytes32 gsaLine,
+        bytes32 gasLine,
         uint256 subscriptionId,
         uint32 callbackGasLimit
     ) VRFConsumerBaseV2Plus(vrfCoordinator) {
         ENTRANCE_FEE = entranceFee;
         INTERVAL = interval;
-        KEY_HASH = gsaLine;
+        KEY_HASH = gasLine;
         SUBSCRIPTION_ID = subscriptionId;
         CALLBACK_GAS_LIMIT = callbackGasLimit;
 

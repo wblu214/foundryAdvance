@@ -12,8 +12,8 @@ contract DeployRaffle is Script {
             uint256 entranceFee,
             uint256 interval,
             address vrfCoordinator,
-            bytes32 gasLane,
-            uint64 subscriptionId,
+            bytes32 gasLine,
+            uint256 subscriptionId,
             uint32 callbackGasLimit
         ) = helperConfig.activeNetworkConfig();
 
@@ -22,7 +22,7 @@ contract DeployRaffle is Script {
             entranceFee,
             interval,
             vrfCoordinator,
-            gasLane,
+            gasLine,
             subscriptionId,
             callbackGasLimit
         );
