@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import {Test, console} from "forge-std/Test.sol";
+import {Test} from "forge-std/Test.sol";
 import {Raffle} from "../src/Raffle.sol";
 import {DeployRaffle} from "../script/DeployRaffle.s.sol";
 import {HelperConfig} from "../script/HelperConfig.s.sol";
@@ -19,7 +19,7 @@ contract RaffleTest is Test {
     uint256 subscriptionId;
     uint32 callbackGasLimit;
 
-    address public PLAYER = makeAddr("player");
+    address public player = makeAddr("player");
     uint256 public constant STARTING_USER_BALANCE = 10 ether;
 
     event RaffleEntered(address indexed player);
@@ -38,12 +38,12 @@ contract RaffleTest is Test {
             callbackGasLimit
         ) = helperConfig.activeNetworkConfig();
 
-        vm.deal(PLAYER, STARTING_USER_BALANCE);
+        vm.deal(player, STARTING_USER_BALANCE);
     }
 
     function testRaffleRevertsWhenYouDontPayEnough() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
 
         // Act / Assert
         vm.expectRevert(Raffle.NotEnoughEth.selector);
@@ -52,7 +52,7 @@ contract RaffleTest is Test {
 
     function testRaffleRecordsPlayerWhenTheyEnter() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
 
         // Act
         raffle.payEntranceFee{value: entranceFee}();
@@ -65,17 +65,17 @@ contract RaffleTest is Test {
 
     function testEmitsEventOnEntrance() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
 
         // Act / Assert
         vm.expectEmit(true, false, false, false, address(raffle));
-        emit RaffleEntered(PLAYER);
+        emit RaffleEntered(player);
         raffle.payEntranceFee{value: entranceFee}();
     }
 
     function testCantEnterWhenRaffleIsCalculating() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
         vm.warp(block.timestamp + interval + 1);
         vm.roll(block.number + 1);
@@ -83,7 +83,7 @@ contract RaffleTest is Test {
 
         // Act / Assert
         vm.expectRevert(Raffle.WaitNextDrawTime.selector);
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
     }
 
@@ -101,7 +101,7 @@ contract RaffleTest is Test {
 
     function testCheckUpkeepReturnsFalseIfRaffleNotOpen() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
         vm.warp(block.timestamp + interval + 1);
         vm.roll(block.number + 1);
@@ -116,7 +116,7 @@ contract RaffleTest is Test {
 
     function testCheckUpkeepReturnsFalseIfEnoughTimeHasntPassed() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
 
         // Act
@@ -128,7 +128,7 @@ contract RaffleTest is Test {
 
     function testCheckUpkeepReturnsTrueIfParametersAreGood() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
         vm.warp(block.timestamp + interval + 1);
         vm.roll(block.number + 1);
@@ -142,7 +142,7 @@ contract RaffleTest is Test {
 
     function testPerformUpkeepCanOnlyRunIfCheckUpkeepIsTrue() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
         vm.warp(block.timestamp + interval + 1);
         vm.roll(block.number + 1);
@@ -154,10 +154,6 @@ contract RaffleTest is Test {
 
     function testPerformUpkeepRevertsIfCheckUpkeepIsFalse() public {
         // Arrange
-        uint256 currentBalance = 0 ether;
-        uint256 numPlayers = 0;
-        uint256 raffleState = uint256(Raffle.RaffleState.OPEN);
-
         // Act / Assert
         vm.expectRevert(
             abi.encodeWithSelector(Raffle.WaitNextDrawTime.selector)
@@ -168,7 +164,7 @@ contract RaffleTest is Test {
 
     function testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
         vm.warp(block.timestamp + interval + 1);
         vm.roll(block.number + 1);
@@ -188,7 +184,7 @@ contract RaffleTest is Test {
     }
 
     modifier raffleEntered() {
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
         vm.warp(block.timestamp + interval + 1);
         vm.roll(block.number + 1);
@@ -230,6 +226,7 @@ contract RaffleTest is Test {
             i < startingIndex + additionalEntrants;
             i++
         ) {
+            // forge-lint: disable-next-line(unsafe-typecast)
             address newPlayer = address(uint160(i));
             hoax(newPlayer, STARTING_USER_BALANCE);
             raffle.payEntranceFee{value: entranceFee}();
@@ -270,7 +267,7 @@ contract RaffleTest is Test {
 
     function testGetPlayer() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
 
         // Act
@@ -289,6 +286,7 @@ contract RaffleTest is Test {
             i < startingIndex + additionalEntrants;
             i++
         ) {
+            // forge-lint: disable-next-line(unsafe-typecast)
             address newPlayer = address(uint160(i));
             hoax(newPlayer, STARTING_USER_BALANCE);
             raffle.payEntranceFee{value: entranceFee}();
@@ -311,7 +309,7 @@ contract RaffleTest is Test {
         assertTrue(true);
     }
 
-    function testGetRaffleState() public view {
+    function testGetRaffleState() public pure {
         // 由于 Raffle 合约没有 getRaffleState 方法，我们无法直接测试
         // 但可以通过其他方式验证
         assertTrue(true);
@@ -319,7 +317,7 @@ contract RaffleTest is Test {
 
     function testGetNumberOfPlayers() public {
         // Arrange
-        vm.prank(PLAYER);
+        vm.prank(player);
         raffle.payEntranceFee{value: entranceFee}();
 
         // Act
