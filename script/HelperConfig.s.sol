@@ -3,6 +3,7 @@ pragma solidity 0.8.20;
 
 import {Script} from "lib/forge-std/src/Script.sol";
 import {VRFCoordinatorV2_5Mock} from "lib/chainlink-brownie-contracts/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
+import {LinkToken} from "../test/LinkToken.sol";
 
 contract HelperConfig is Script {
     uint96 public constant MOCK_BASE_FEE = 0.25 ether; // 0.25 LINK
@@ -16,6 +17,7 @@ contract HelperConfig is Script {
         bytes32 gasLine;
         uint256 subscriptionId;
         uint32 callbackGasLimit;
+        address link;
     }
 
     NetworkConfig public activeNetworkConfig;
@@ -47,7 +49,8 @@ contract HelperConfig is Script {
                 vrfCoordinator: 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B,
                 gasLine: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
                 subscriptionId: 0, // update this with your subscription id
-                callbackGasLimit: 500000 // 500,000 gas
+                callbackGasLimit: 500000, // 500,000 gas
+                link: 0x779877A7B0D9E8603169DdbD7836e478b4624789
             });
     }
 
@@ -59,7 +62,8 @@ contract HelperConfig is Script {
                 vrfCoordinator: 0xD7f86b4b8Cae7D942340FF628F82735b7a20893a,
                 gasLine: 0x3fd2fec10d06ee8f65e7f2e95f5c56511359ece3f33960ad8a866ae24a8ff10b,
                 subscriptionId: 0, // update this with your subscription id
-                callbackGasLimit: 500000 // 500,000 gas
+                callbackGasLimit: 500000, // 500,000 gas
+                link: 0x514910771AF9Ca656af840dff83E8264EcF986CA
             });
     }
 
@@ -76,6 +80,7 @@ contract HelperConfig is Script {
             GAS_PRICE_LINK,
             MOCK_WEI_PER_UINT_LINK
         );
+        LinkToken linkToken = new LinkToken();
         vm.stopBroadcast();
         localNetworkConfig = NetworkConfig({
             entranceFee: 0.01 ether,
@@ -84,7 +89,8 @@ contract HelperConfig is Script {
             // eny value will work for the gasLine
             gasLine: 0x3fd2fec10d06ee8f65e7f2e95f5c56511359ece3f33960ad8a866ae24a8ff10b,
             subscriptionId: 0,
-            callbackGasLimit: 500000 // 500,000 gas
+            callbackGasLimit: 500000, // 500,000 gas
+            link: address(linkToken)
         });
         return localNetworkConfig;
     }

@@ -4,6 +4,7 @@ pragma solidity 0.8.20;
 import {Script, console} from "lib/forge-std/src/Script.sol";
 import {HelperConfig} from "../script/HelperConfig.s.sol";
 import {VRFCoordinatorV2_5Mock} from "lib/chainlink-brownie-contracts/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
+import {LinkToken} from "../test/LinkToken.sol";
 
 contract CreateSubscription is Script {
     function createSubscriptionConfig() public returns (uint256, address) {
@@ -34,4 +35,16 @@ contract CreateSubscription is Script {
     function run() public {
         createSubscriptionConfig();
     }
+}
+
+contract FundSubscription is Script {
+    function FundSubscriptionUsingConfig() public {
+        HelperConfig helperConfig = new HelperConfig();
+        address vrfCoordinator = helperConfig
+            .getActiveNetworkConfig()
+            .vrfCoordinator;
+        uint256 subsID = helperConfig.getActiveNetworkConfig().subscriptionId;
+    }
+
+    function run() public {}
 }
