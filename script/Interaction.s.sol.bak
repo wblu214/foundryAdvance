@@ -99,13 +99,12 @@ contract AddConsumer is Script {
     }
 
     function addConsumer(
-        address raffle,
+        address _raffle,
         address contractToAddToVrf,
         uint256 subsId
     ) public {
         console.log("Adding consumer contract: ", contractToAddToVrf);
         console.log("On ChainID: ", block.chainid);
-        console.log("raffle is : ", raffle);
         vm.startBroadcast();
         VRFCoordinatorV2_5Mock(contractToAddToVrf).addConsumer(
             subsId,
