@@ -75,7 +75,7 @@ contract FundSubscription is Script {
             vm.startBroadcast();
             LinkToken(linkToken).transferAndCall(
                 vrfCoordinatorV2_5,
-                subsID,
+                FUND_AMOUNT,
                 abi.encode(subsID)
             );
             vm.stopBroadcast();
